@@ -131,7 +131,9 @@ static void on_message(struct mosquitto *mosq, void *obj, const struct mosquitto
         MQTTClient* client = (__bridge MQTTClient*)obj;
         LogDebug(@"[%@] on message %@", client.clientID, message);
         if (client.messageHandler) {
-            client.messageHandler(message);
+            dispatch_async(dispatch_get_main_queue(), ^{
+                client.messageHandler(message);
+            });
         }
     }
 }
