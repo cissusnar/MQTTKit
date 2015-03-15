@@ -84,7 +84,9 @@ static void on_connect(struct mosquitto *mosq, void *obj, int rc)
     LogDebug(@"[%@] on_connect rc = %d", client.clientID, rc);
     client.connected = (rc == ConnectionAccepted);
     if (client.connectionCompletionHandler) {
-        client.connectionCompletionHandler(rc);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            client.connectionCompletionHandler(rc);
+        });
     }
 }
 
@@ -98,7 +100,9 @@ static void on_disconnect(struct mosquitto *mosq, void *obj, int rc)
 
     client.connected = NO;
     if (client.disconnectionHandler) {
-        client.disconnectionHandler(rc);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            client.disconnectionHandler(rc);
+        });
     }
 }
 
