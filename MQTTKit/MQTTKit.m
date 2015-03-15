@@ -225,6 +225,7 @@ static void on_unsubscribe(struct mosquitto *mosq, void *obj, int message_id)
 #pragma mark - Connection
 
 - (void) connectWithCompletionHandler:(void (^)(MQTTConnectionReturnCode code))completionHandler {
+    dispatch_async(self.queue, ^{//!
     self.connectionCompletionHandler = completionHandler;
 
     const char *cstrHost = [self.host cStringUsingEncoding:NSASCIIStringEncoding];
@@ -242,7 +243,6 @@ static void on_unsubscribe(struct mosquitto *mosq, void *obj, int message_id)
 
     mosquitto_connect(mosq, cstrHost, self.port, self.keepAlive);
     
-    dispatch_async(self.queue, ^{
         LogDebug(@"start mosquitto loop on %@", self.queue);
         mosquitto_loop_forever(mosq, -1, 1);
         LogDebug(@"end mosquitto loop on %@", self.queue);
