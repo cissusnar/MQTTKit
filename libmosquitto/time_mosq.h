@@ -30,6 +30,8 @@ POSSIBILITY OF SUCH DAMAGE.
 #ifndef _TIME_MOSQ_H_
 #define _TIME_MOSQ_H_
 
+#include <time.h>
+
 time_t mosquitto_time(void);
 
 #endif
